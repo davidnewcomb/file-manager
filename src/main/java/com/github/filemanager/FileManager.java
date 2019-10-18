@@ -23,20 +23,16 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -56,7 +52,6 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -106,8 +101,6 @@ public class FileManager {
 
 	private static Logger L = LoggerFactory.getLogger(FileManager.class);
 
-	/** Title of the application */
-	public static final String APP_TITLE = "FileMan";
 	/** Used to open/edit/print files. */
 	private Desktop desktop;
 	/** Provides nice icons and names for files. */
@@ -692,7 +685,7 @@ public class FileManager {
 
 		JFrame f = (JFrame) gui.getTopLevelAncestor();
 		if (f != null) {
-			f.setTitle(APP_TITLE + " :: " + fileSystemView.getSystemDisplayName(file));
+			f.setTitle(Main.APP_TITLE + " :: " + fileSystemView.getSystemDisplayName(file));
 		}
 
 		gui.repaint();
@@ -721,39 +714,4 @@ public class FileManager {
 		return created;
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					// Significantly improves the look of the output in
-					// terms of the file names returned by FileSystemView!
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (Exception weTried) {
-				}
-				JFrame f = new JFrame(APP_TITLE);
-				f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-				FileManager fileManager = new FileManager();
-				f.setContentPane(fileManager.getGui());
-
-				try {
-					URL urlBig = fileManager.getClass().getResource("fm-icon-32x32.png");
-					URL urlSmall = fileManager.getClass().getResource("fm-icon-16x16.png");
-					ArrayList<Image> images = new ArrayList<Image>();
-					images.add(ImageIO.read(urlBig));
-					images.add(ImageIO.read(urlSmall));
-					f.setIconImages(images);
-				} catch (Exception weTried) {
-				}
-
-				f.pack();
-				f.setLocationByPlatform(true);
-				f.setMinimumSize(f.getSize());
-				f.setVisible(true);
-
-				fileManager.showRootFile();
-			}
-		});
-	}
 }
