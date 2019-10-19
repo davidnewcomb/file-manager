@@ -2,6 +2,7 @@
 package com.github.filemanager;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -103,8 +104,11 @@ public class FileTableModel extends AbstractTableModel {
 	}
 
 	public void setFiles(File[] files) {
+
+		Arrays.sort(files, new FileSorter());
 		L.info("FileTableModel:setFiles[" + files.length + "]");
 		this.files = files;
 		fireTableDataChanged();
 	}
+
 }
