@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 public class FileTableModel extends AbstractTableModel {
 
 	private static final Logger L = LoggerFactory.getLogger(FileTableModel.class);
+
 	public static final int ICON = 0;
 	public static final int FILE_NAME = 1;
 	public static final int PATH = 2;
@@ -30,11 +31,7 @@ public class FileTableModel extends AbstractTableModel {
 	private String[] columns = { "Icon", "File", "Path/name", "Size", "Last Modified", "R", "W", "E", "D", "F", };
 
 	FileTableModel() {
-		this(new File[0]);
-	}
-
-	FileTableModel(File[] files) {
-		this.files = files;
+		this.files = new File[0];
 	}
 
 	@Override
@@ -106,6 +103,7 @@ public class FileTableModel extends AbstractTableModel {
 	}
 
 	public void setFiles(File[] files) {
+		L.info("FileTableModel:setFiles[" + files.length + "]");
 		this.files = files;
 		fireTableDataChanged();
 	}
