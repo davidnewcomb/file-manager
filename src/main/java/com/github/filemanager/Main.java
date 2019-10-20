@@ -54,7 +54,7 @@ public class Main {
 	private static void load(ArrayList<Image> images, FileManager fileManager, String name) throws IOException {
 		URL url = fileManager.getClass().getResource(name);
 		if (url == null) {
-			L.warn("Can not load : " + url);
+			L.warn("Can not load : " + name);
 		} else {
 			images.add(ImageIO.read(url));
 		}

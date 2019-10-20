@@ -1,14 +1,10 @@
 package com.github.filemanager;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,7 +12,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
@@ -39,18 +34,6 @@ public class Gui extends JPanel {
 
 	private static final int ROW_ICON_PADDING = 6;
 
-	private Gui thiz;
-	/** Used to open/edit/print files. */
-	private Desktop desktop;
-
-	/* File controls. */
-	private JButton openFile;
-	private JButton printFile;
-	private JButton editFile;
-	private JButton deleteFile;
-	private JButton newFile;
-	private JButton copyFile;
-
 	private JProgressBar progressBar;
 
 	/** File-system tree. Built Lazily */
@@ -62,22 +45,23 @@ public class Gui extends JPanel {
 	private FileTableModel fileTableModel;
 	private FileSystemView fileSystemView;
 
-	/** currently selected File. */
-	// TODO Duplicated in FileManager
-	private File currentFile;
+	// /** currently selected File. */
+	// // TODO Duplicated in FileManager
+	// private File currentFile;
 
 	private FileDetailsView fileDetailsView;
+	private FmToolBar toolBar;
 
 	private ListSelectionListener listSelectionListener;
 
 	public Gui(final FileManager fileManager) {
 		super(new BorderLayout(3, 3));
-		this.thiz = this;
+		// this.thiz = this;
 
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		fileSystemView = FileSystemView.getFileSystemView();
-		desktop = Desktop.getDesktop();
+		// desktop = Desktop.getDesktop();
 
 		JPanel detailView = new JPanel(new BorderLayout(3, 3));
 		// fileTableModel = new FileTableModel();
@@ -109,7 +93,9 @@ public class Gui extends JPanel {
 			public void valueChanged(ListSelectionEvent lse) {
 				int row = table.getSelectionModel().getLeadSelectionIndex();
 				FileTableModel ftm = (FileTableModel) table.getModel();
-				fileDetailsView.updatetFileDetails(ftm.getFile(row));
+				File payload = ftm.getFile(row);
+				fileDetailsView.updatetFileDetails(payload);
+				toolBar.updateFile(payload);
 			}
 		};
 		table.getSelectionModel().addListSelectionListener(listSelectionListener);
@@ -127,8 +113,11 @@ public class Gui extends JPanel {
 			@Override
 			public void valueChanged(TreeSelectionEvent tse) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tse.getPath().getLastPathComponent();
+				// TODO should be called via listeners
 				fileManager.showChildren(node);
-				fileDetailsView.updatetFileDetails((File) node.getUserObject());
+				File payload = (File) node.getUserObject();
+				fileDetailsView.updatetFileDetails(payload);
+				toolBar.updateFile(payload);
 			}
 		};
 
@@ -138,14 +127,13 @@ public class Gui extends JPanel {
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
 			root.add(node);
 			// showChildren(node);
-			//
+
 			File[] files = fileSystemView.getFiles(fileSystemRoot, true);
 			for (File file : files) {
 				if (file.isDirectory()) {
 					node.add(new DefaultMutableTreeNode(file));
 				}
 			}
-			//
 		}
 
 		tree = new JTree(treeModel);
@@ -153,6 +141,7 @@ public class Gui extends JPanel {
 		tree.addTreeSelectionListener(treeSelectionListener);
 		tree.setCellRenderer(new FileTreeCellRenderer());
 		tree.expandRow(0);
+
 		JScrollPane treeScroll = new JScrollPane(tree);
 
 		// as per trashgod tip
@@ -164,100 +153,7 @@ public class Gui extends JPanel {
 
 		fileDetailsView = new FileDetailsView();
 
-		JToolBar toolBar = new JToolBar();
-		// mnemonics stop working in a floated toolbar
-		toolBar.setFloatable(false);
-
-		openFile = new JButton("Open");
-		openFile.setMnemonic('o');
-
-		openFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					desktop.open(currentFile);
-				} catch (Throwable t) {
-					showThrowable(t);
-				}
-				thiz.repaint();
-			}
-		});
-		toolBar.add(openFile);
-
-		editFile = new JButton("Edit");
-		editFile.setMnemonic('e');
-		editFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					desktop.edit(currentFile);
-				} catch (Throwable t) {
-					showThrowable(t);
-				}
-			}
-		});
-		toolBar.add(editFile);
-
-		printFile = new JButton("Print");
-		printFile.setMnemonic('p');
-		printFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					desktop.print(currentFile);
-				} catch (Throwable t) {
-					showThrowable(t);
-				}
-			}
-		});
-		toolBar.add(printFile);
-
-		// Check the actions are supported on this platform!
-		openFile.setEnabled(desktop.isSupported(Desktop.Action.OPEN));
-		editFile.setEnabled(desktop.isSupported(Desktop.Action.EDIT));
-		printFile.setEnabled(desktop.isSupported(Desktop.Action.PRINT));
-
-		toolBar.addSeparator();
-
-		newFile = new JButton("New");
-		newFile.setMnemonic('n');
-		newFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				fileManager.newFile(treeModel, currentFile);
-			}
-		});
-		toolBar.add(newFile);
-
-		copyFile = new JButton("Copy");
-		copyFile.setMnemonic('c');
-		copyFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				showErrorMessage("'Copy' not implemented.", "Not implemented.");
-			}
-		});
-		toolBar.add(copyFile);
-
-		JButton renameFile = new JButton("Rename");
-		renameFile.setMnemonic('r');
-		renameFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				fileManager.renameFile(treeModel, currentFile);
-			}
-		});
-		toolBar.add(renameFile);
-
-		deleteFile = new JButton("Delete");
-		deleteFile.setMnemonic('d');
-		deleteFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				fileManager.deleteFile(treeModel, currentFile);
-			}
-		});
-		toolBar.add(deleteFile);
+		toolBar = new FmToolBar(fileManager, this, treeModel);
 
 		JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
@@ -331,14 +227,14 @@ public class Gui extends JPanel {
 		table.getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
 
-	public void showThrowable(Throwable t) {
-		t.printStackTrace();
-		JOptionPane.showMessageDialog(thiz, t.toString(), t.getMessage(), JOptionPane.ERROR_MESSAGE);
-		thiz.repaint();
+	public void showErrorMessage(String errorMessage, String errorTitle) {
+		JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
 	}
 
-	public void showErrorMessage(String errorMessage, String errorTitle) {
-		JOptionPane.showMessageDialog(thiz, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
+	public void showThrowable(Throwable t) {
+		t.printStackTrace();
+		JOptionPane.showMessageDialog(this, t.toString(), t.getMessage(), JOptionPane.ERROR_MESSAGE);
+		this.repaint();
 	}
 
 }
