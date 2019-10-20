@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -32,9 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -77,9 +73,6 @@ public class FileManager {
 
 	private static Logger L = LoggerFactory.getLogger(FileManager.class);
 
-	/** Provides nice icons and names for files. */
-	private FileSystemView fileSystemView;
-
 	/** currently selected File. */
 	// private File currentFile;
 
@@ -94,7 +87,7 @@ public class FileManager {
 	private JTextField name;
 
 	public FileManager() {
-		fileSystemView = FileSystemView.getFileSystemView();
+		//
 	}
 
 	public Gui getGui() {
@@ -251,55 +244,13 @@ public class FileManager {
 		gui.repaint();
 	}
 
-	/** Update the table on the EDT */
-	private void setTableData(final File[] files) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				L.info("FileManager:setTableData:run");
-				gui.updateTableFiles(files);
-			}
-		});
-
-	}
-
 	/**
 	 * Add the files that are contained within the directory of this node.
 	 * Thanks to Hovercraft Full Of Eels.
 	 */
-	void showChildren(final DefaultMutableTreeNode node) {
-		gui.uiShowChildrenOn();
-		SwingWorker<Void, File> worker = new SwingWorker<Void, File>() {
-			@Override
-			public Void doInBackground() {
-				File file = (File) node.getUserObject();
-				if (file.isDirectory()) {
-					File[] files = fileSystemView.getFiles(file, true); // !!
-					if (node.isLeaf()) {
-						for (File child : files) {
-							if (child.isDirectory()) {
-								publish(child);
-							}
-						}
-					}
-					setTableData(files);
-				}
-				return null;
-			}
-
-			@Override
-			protected void process(List<File> chunks) {
-				for (File child : chunks) {
-					node.add(new DefaultMutableTreeNode(child));
-				}
-			}
-
-			@Override
-			protected void done() {
-				gui.uiShowChildrenOff();
-			}
-		};
-		worker.execute();
+	void showChildren(DefaultMutableTreeNode node) {
+		ShowChildrenSwingWorker w = new ShowChildrenSwingWorker(gui, node);
+		w.execute();
 	}
 
 	public static boolean copyFile(File from, File to) throws IOException {
