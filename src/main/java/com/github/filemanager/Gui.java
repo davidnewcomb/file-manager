@@ -51,17 +51,6 @@ public class Gui extends JPanel {
 	private JButton newFile;
 	private JButton copyFile;
 
-	// /* File details. */
-	// private JLabel fileName;
-	// private JTextField path;
-	// private JLabel date;
-	// private JLabel size;
-	// private JCheckBox readable;
-	// private JCheckBox writable;
-	// private JCheckBox executable;
-	// private JRadioButton isDirectory;
-	// private JRadioButton isFile;
-
 	private JProgressBar progressBar;
 
 	/** File-system tree. Built Lazily */
@@ -175,46 +164,6 @@ public class Gui extends JPanel {
 
 		fileDetailsView = new FileDetailsView();
 
-		// details for a File
-		// JPanel fileMainDetails = new JPanel(new BorderLayout(4, 2));
-		// fileMainDetails.setBorder(new EmptyBorder(0, 6, 0, 6));
-		//
-		// JPanel fileDetailsLabels = new JPanel(new GridLayout(0, 1, 2, 2));
-		// fileMainDetails.add(fileDetailsLabels, BorderLayout.WEST);
-		//
-		// JPanel fileDetailsValues = new JPanel(new GridLayout(0, 1, 2, 2));
-		// fileMainDetails.add(fileDetailsValues, BorderLayout.CENTER);
-		//
-		// fileDetailsLabels.add(new JLabel("File", JLabel.TRAILING));
-		// fileName = new JLabel();
-		// fileDetailsValues.add(fileName);
-		// fileDetailsLabels.add(new JLabel("Path/name", JLabel.TRAILING));
-		// path = new JTextField(5);
-		// path.setEditable(false);
-		// fileDetailsValues.add(path);
-		// fileDetailsLabels.add(new JLabel("Last Modified", JLabel.TRAILING));
-		// date = new JLabel();
-		// fileDetailsValues.add(date);
-		// fileDetailsLabels.add(new JLabel("File size", JLabel.TRAILING));
-		// size = new JLabel();
-		// fileDetailsValues.add(size);
-		// fileDetailsLabels.add(new JLabel("Type", JLabel.TRAILING));
-		//
-		// JPanel flags = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 0));
-		// isDirectory = new JRadioButton("Directory");
-		// isDirectory.setEnabled(false);
-		// flags.add(isDirectory);
-		//
-		// isFile = new JRadioButton("File");
-		// isFile.setEnabled(false);
-		// flags.add(isFile);
-		// fileDetailsValues.add(flags);
-		//
-		// int count = fileDetailsLabels.getComponentCount();
-		// for (int ii = 0; ii < count; ii++) {
-		// fileDetailsLabels.getComponent(ii).setEnabled(false);
-		// }
-
 		JToolBar toolBar = new JToolBar();
 		// mnemonics stop working in a floated toolbar
 		toolBar.setFloatable(false);
@@ -309,23 +258,6 @@ public class Gui extends JPanel {
 			}
 		});
 		toolBar.add(deleteFile);
-
-		// toolBar.addSeparator();
-		//
-		// readable = new JCheckBox("Read ");
-		// readable.setMnemonic('a');
-		// readable.setEnabled(false);
-		// toolBar.add(readable);
-		//
-		// writable = new JCheckBox("Write ");
-		// writable.setMnemonic('w');
-		// writable.setEnabled(false);
-		// toolBar.add(writable);
-		//
-		// executable = new JCheckBox("Execute");
-		// executable.setMnemonic('x');
-		// executable.setEnabled(false);
-		// toolBar.add(executable);
 
 		JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
