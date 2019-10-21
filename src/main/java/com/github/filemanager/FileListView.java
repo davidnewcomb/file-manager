@@ -7,7 +7,6 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableColumn;
@@ -41,27 +40,8 @@ public class FileListView extends JTable {
 		setColumnWidth(FileTableModel.DIRECTORY, -1);
 		setColumnWidth(FileTableModel.FILE, -1);
 
-		listSelectionListener = new TableListSelectionListener(this, gui);
+		listSelectionListener = new FileListViewListSelectionListener(this, gui);
 		getSelectionModel().addListSelectionListener(listSelectionListener);
-	}
-
-	class TableListSelectionListener implements ListSelectionListener {
-		private JTable table;
-		private Gui gui;
-
-		public TableListSelectionListener(JTable table, Gui gui) {
-			this.table = table;
-			this.gui = gui;
-		}
-
-		@Override
-		public void valueChanged(ListSelectionEvent lse) {
-			int row = table.getSelectionModel().getLeadSelectionIndex();
-			FileTableModel ftm = (FileTableModel) table.getModel();
-			File file = ftm.getFile(row);
-			gui.updateFile(file);
-		}
-
 	}
 
 	public void setColumnWidth(int column, int width) {
