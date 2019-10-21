@@ -3,6 +3,7 @@ package com.github.filemanager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,6 +27,7 @@ public class Gui extends JPanel {
 	private static FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
 	private JProgressBar progressBar;
+	private AddressBar addressBar;
 
 	/** File-system tree. Built Lazily */
 	private JTree tree;
@@ -64,6 +66,7 @@ public class Gui extends JPanel {
 			// showChildren(node);
 
 			File[] files = fileSystemView.getFiles(fileSystemRoot, true);
+			Arrays.sort(files, new FileSorter());
 			for (File file : files) {
 				if (file.isDirectory()) {
 					node.add(new DefaultMutableTreeNode(file));
@@ -107,11 +110,14 @@ public class Gui extends JPanel {
 
 		add(simpleOutput, BorderLayout.SOUTH);
 
+		addressBar = new AddressBar();
+		add(addressBar, BorderLayout.NORTH);
 	}
 
 	public void updateFile(File file) {
 		fileDetailsView.updatetFileDetails(file);
 		toolBar.updateFile(file);
+		addressBar.updateFile(file);
 	}
 
 	public void showRootFile() {
