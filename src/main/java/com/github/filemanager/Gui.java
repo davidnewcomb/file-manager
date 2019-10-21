@@ -11,7 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -55,17 +54,7 @@ public class Gui extends JPanel {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 		treeModel = new DefaultTreeModel(root);
 
-		TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
-			@Override
-			public void valueChanged(TreeSelectionEvent tse) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tse.getPath().getLastPathComponent();
-				// TODO should be called via listeners
-				fileManager.showChildren(node);
-				File payload = (File) node.getUserObject();
-				fileDetailsView.updatetFileDetails(payload);
-				toolBar.updateFile(payload);
-			}
-		};
+		TreeSelectionListener treeSelectionListener = new FileTreeSelectionListener(this, fileManager);
 
 		// show the file system roots.
 		File[] roots = fileSystemView.getRoots();
