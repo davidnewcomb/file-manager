@@ -20,6 +20,7 @@ public class FileListView extends JTable {
 	private ListSelectionListener listSelectionListener;
 
 	public FileListView(Gui gui) {
+		setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoCreateRowSorter(true);
 		setShowVerticalLines(false);
@@ -31,14 +32,15 @@ public class FileListView extends JTable {
 		setRowHeight(icon.getIconHeight() + ROW_ICON_PADDING);
 
 		setColumnWidth(FileTableModel.ICON, -1);
-		setColumnWidth(FileTableModel.SIZE, 60);
-		getColumnModel().getColumn(FileTableModel.FILE_NAME).setMaxWidth(120);
+		setColumnWidth(FileTableModel.SIZE, 100);
+		// setColumnWidth(FileTableModel.FILE_NAME, Integer.MAX_VALUE);
+		getColumnModel().getColumn(FileTableModel.FILE_NAME).setMaxWidth(Integer.MAX_VALUE);
 		setColumnWidth(FileTableModel.LAST_MODIFIED, -1);
-		setColumnWidth(FileTableModel.READ, -1);
-		setColumnWidth(FileTableModel.WRITE, -1);
-		setColumnWidth(FileTableModel.EXECUTE, -1);
-		setColumnWidth(FileTableModel.DIRECTORY, -1);
-		setColumnWidth(FileTableModel.FILE, -1);
+		setColumnWidth(FileTableModel.READ, 20);
+		setColumnWidth(FileTableModel.WRITE, 20);
+		setColumnWidth(FileTableModel.EXECUTE, 20);
+		setColumnWidth(FileTableModel.DIRECTORY, 20);
+		setColumnWidth(FileTableModel.FILE, 20);
 
 		listSelectionListener = new FileListViewListSelectionListener(this, gui);
 		getSelectionModel().addListSelectionListener(listSelectionListener);
@@ -54,8 +56,12 @@ public class FileListView extends JTable {
 			width = (int) preferred.getWidth() + 14;
 		}
 		tableColumn.setPreferredWidth(width);
-		tableColumn.setMaxWidth(width);
-		tableColumn.setMinWidth(width);
+		if (width == Integer.MAX_VALUE) {
+			tableColumn.setMaxWidth(Integer.MAX_VALUE);
+		} else {
+			tableColumn.setMaxWidth(width);
+		}
+		// tableColumn.setMinWidth(100);
 	}
 
 	public void updateFiles(File[] files) {

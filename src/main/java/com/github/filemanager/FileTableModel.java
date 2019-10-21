@@ -18,18 +18,17 @@ public class FileTableModel extends AbstractTableModel {
 
 	public static final int ICON = 0;
 	public static final int FILE_NAME = 1;
-	public static final int PATH = 2;
-	public static final int SIZE = 3;
-	public static final int LAST_MODIFIED = 4;
-	public static final int READ = 5;
-	public static final int WRITE = 6;
-	public static final int EXECUTE = 7;
-	public static final int DIRECTORY = 8;
-	public static final int FILE = 9;
+	public static final int SIZE = 2;
+	public static final int LAST_MODIFIED = 3;
+	public static final int READ = 4;
+	public static final int WRITE = 5;
+	public static final int EXECUTE = 6;
+	public static final int DIRECTORY = 7;
+	public static final int FILE = 8;
 
 	private File[] files;
 	private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
-	private String[] columns = { "Icon", "File", "Path/name", "Size", "Last Modified", "R", "W", "E", "D", "F", };
+	private String[] columns = { "Icon", "File", "Size", "Last Modified", "R", "W", "E", "D", "F", };
 
 	FileTableModel() {
 		this.files = new File[0];
@@ -43,9 +42,8 @@ public class FileTableModel extends AbstractTableModel {
 			return fileSystemView.getSystemIcon(file);
 		case FILE_NAME:
 			return fileSystemView.getSystemDisplayName(file);
-		case PATH:
-			return file.getPath();
 		case SIZE:
+			// return niceSize(file.length(), 2);
 			return file.length();
 		case LAST_MODIFIED:
 			return file.lastModified();
@@ -60,7 +58,7 @@ public class FileTableModel extends AbstractTableModel {
 		case FILE:
 			return file.isFile();
 		default:
-			L.error("Logic Error");
+			L.error("Unknown FileTable index row=" + row + " col=" + column);
 		}
 		return "";
 	}
@@ -104,11 +102,22 @@ public class FileTableModel extends AbstractTableModel {
 	}
 
 	public void setFiles(File[] files) {
-
 		Arrays.sort(files, new FileSorter());
-		L.info("FileTableModel:setFiles[" + files.length + "]");
 		this.files = files;
 		fireTableDataChanged();
 	}
 
+	public static String niceSize(double bytes, int digits) {
+		String[] dictionary = { "b", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+		int index = 0;
+		for (index = 0; index < dictionary.length; index++) {
+			if (bytes < 1024) {
+				break;
+			}
+			bytes = bytes / 1024;
+		}
+		String s = String.format("%." + digits + "f", bytes) + " " + dictionary[index];
+		s = s.replaceAll(".00", "");
+		return s;
+	}
 }
