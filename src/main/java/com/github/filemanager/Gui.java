@@ -63,7 +63,7 @@ public class Gui extends JPanel {
 		for (File fileSystemRoot : roots) {
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
 			root.add(node);
-			// showChildren(node);
+			// fileManager.showChildren(node);
 
 			File[] files = fileSystemView.getFiles(fileSystemRoot, true);
 			Arrays.sort(files, new FileSorter());
