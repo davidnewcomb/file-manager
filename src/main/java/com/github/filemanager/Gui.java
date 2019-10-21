@@ -10,9 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -29,8 +27,7 @@ public class Gui extends JPanel {
 	private JProgressBar progressBar;
 	private AddressBar addressBar;
 
-	/** File-system tree. Built Lazily */
-	private JTree tree;
+	private FileTreeView fileTreeView;
 
 	private DefaultTreeModel treeModel;
 
@@ -56,8 +53,6 @@ public class Gui extends JPanel {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 		treeModel = new DefaultTreeModel(root);
 
-		TreeSelectionListener treeSelectionListener = new FileTreeSelectionListener(this, fileManager);
-
 		// show the file system roots.
 		File[] roots = fileSystemView.getRoots();
 		for (File fileSystemRoot : roots) {
@@ -74,16 +69,8 @@ public class Gui extends JPanel {
 			}
 		}
 
-		tree = new JTree(treeModel);
-		tree.setRootVisible(false);
-		tree.addTreeSelectionListener(treeSelectionListener);
-		tree.setCellRenderer(new FileTreeCellRenderer());
-		tree.expandRow(0);
-
-		JScrollPane treeScroll = new JScrollPane(tree);
-
-		// as per trashgod tip
-		tree.setVisibleRowCount(15);
+		fileTreeView = new FileTreeView(this, treeModel, fileManager);
+		JScrollPane treeScroll = new JScrollPane(fileTreeView);
 
 		Dimension preferredSize = treeScroll.getPreferredSize();
 		Dimension widePreferred = new Dimension(200, (int) preferredSize.getHeight());
@@ -122,11 +109,11 @@ public class Gui extends JPanel {
 
 	public void showRootFile() {
 		// ensure the main files are displayed
-		tree.setSelectionInterval(0, 0);
+		fileTreeView.setSelectionInterval(0, 0);
 	}
 
 	public void uiShowChildrenOn() {
-		tree.setEnabled(false);
+		fileTreeView.setEnabled(false);
 		progressBar.setVisible(true);
 		progressBar.setIndeterminate(true);
 	}
@@ -134,12 +121,12 @@ public class Gui extends JPanel {
 	public void uiShowChildrenOff() {
 		progressBar.setIndeterminate(false);
 		progressBar.setVisible(false);
-		tree.setEnabled(true);
+		fileTreeView.setEnabled(true);
 	}
 
 	public TreePath findTreePath(File find) {
-		for (int ii = 0; ii < tree.getRowCount(); ii++) {
-			TreePath treePath = tree.getPathForRow(ii);
+		for (int ii = 0; ii < fileTreeView.getRowCount(); ii++) {
+			TreePath treePath = fileTreeView.getPathForRow(ii);
 			Object object = treePath.getLastPathComponent();
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) object;
 			File nodeFile = (File) node.getUserObject();
@@ -148,7 +135,7 @@ public class Gui extends JPanel {
 				return treePath;
 			}
 		}
-		// not found!
+		// TODO is this possible?
 		return null;
 	}
 
