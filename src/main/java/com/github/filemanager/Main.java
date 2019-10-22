@@ -13,6 +13,8 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.filemanager.gui.Gui;
+
 public class Main {
 	private static Logger L = LoggerFactory.getLogger(Main.class);
 
@@ -29,8 +31,14 @@ public class Main {
 				JFrame f = new JFrame(APP_TITLE);
 				f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+				FmModel model = new FmModel();
 				FileManager fileManager = new FileManager();
-				f.setContentPane(fileManager.getGui());
+				Gui gui = new Gui(model, fileManager);
+
+				// TODO hack! needed I create service layer
+				fileManager.setGui(gui);
+
+				f.setContentPane(gui);
 
 				try {
 					ArrayList<Image> images = new ArrayList<Image>();
@@ -46,7 +54,7 @@ public class Main {
 				f.setMinimumSize(f.getSize());
 				f.setVisible(true);
 
-				fileManager.getGui().showRootFile();
+				gui.showRootFile();
 			}
 		});
 	}

@@ -3,7 +3,6 @@ package com.github.filemanager.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
-import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -11,16 +10,14 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.filemanager.FileManager;
-import com.github.filemanager.FileSorter;
+import com.github.filemanager.FmModel;
 import com.github.filemanager.gui.details.DetailsPanel;
 import com.github.filemanager.gui.details.ToolBar;
 import com.github.filemanager.gui.table.Table;
@@ -29,21 +26,22 @@ import com.github.filemanager.gui.tree.FileTree;
 public class Gui extends JPanel {
 
 	private static final Logger L = LoggerFactory.getLogger(Gui.class);
-	private static FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+	// private static FileSystemView fileSystemView =
+	// FileSystemView.getFileSystemView();
 
 	private JProgressBar progressBar;
 	private AddressBar addressBar;
 
 	private FileTree fileTreeView;
 
-	private DefaultTreeModel treeModel;
+	// private DefaultTreeModel treeModel;
 
 	private Table fileListView;
 
 	private DetailsPanel fileDetailsView;
 	private ToolBar toolBar;
 
-	public Gui(final FileManager fileManager) {
+	public Gui(FmModel model, final FileManager fileManager) {
 		super(new BorderLayout(3, 3));
 
 		setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -56,27 +54,28 @@ public class Gui extends JPanel {
 		tableScroll.setPreferredSize(new Dimension((int) d.getWidth(), (int) d.getHeight() / 2));
 		detailView.add(tableScroll, BorderLayout.CENTER);
 
-		// the File tree
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		treeModel = new DefaultTreeModel(root);
+		// // the File tree
+		// DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+		// treeModel = new DefaultTreeModel(root);
+		//
+		// // show the file system roots.
+		// File[] roots = fileSystemView.getRoots();
+		// for (File fileSystemRoot : roots) {
+		// DefaultMutableTreeNode node = new
+		// DefaultMutableTreeNode(fileSystemRoot);
+		// root.add(node);
+		// // fileManager.showChildren(node);
+		//
+		// File[] files = fileSystemView.getFiles(fileSystemRoot, true);
+		// Arrays.sort(files, new FileSorter());
+		// for (File file : files) {
+		// if (file.isDirectory()) {
+		// node.add(new DefaultMutableTreeNode(file));
+		// }
+		// }
+		// }
 
-		// show the file system roots.
-		File[] roots = fileSystemView.getRoots();
-		for (File fileSystemRoot : roots) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
-			root.add(node);
-			// fileManager.showChildren(node);
-
-			File[] files = fileSystemView.getFiles(fileSystemRoot, true);
-			Arrays.sort(files, new FileSorter());
-			for (File file : files) {
-				if (file.isDirectory()) {
-					node.add(new DefaultMutableTreeNode(file));
-				}
-			}
-		}
-
-		fileTreeView = new FileTree(this, treeModel, fileManager);
+		fileTreeView = new FileTree(this, model, fileManager);
 		JScrollPane treeScroll = new JScrollPane(fileTreeView);
 
 		Dimension preferredSize = treeScroll.getPreferredSize();
@@ -85,7 +84,7 @@ public class Gui extends JPanel {
 
 		fileDetailsView = new DetailsPanel();
 
-		toolBar = new ToolBar(fileManager, this, treeModel);
+		toolBar = new ToolBar(fileManager, this, model);
 
 		JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
@@ -110,7 +109,7 @@ public class Gui extends JPanel {
 
 	public void updateFile(File file) {
 		fileDetailsView.updatetFileDetails(file);
-		toolBar.updateFile(file);
+		// toolBar.updateFile(file);
 		addressBar.updateFile(file);
 	}
 

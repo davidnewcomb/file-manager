@@ -3,27 +3,26 @@ package com.github.filemanager.gui.details;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import javax.swing.tree.DefaultTreeModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.filemanager.FileManager;
+import com.github.filemanager.FmModel;
 import com.github.filemanager.gui.Gui;
 
 public class ToolBar extends JToolBar {
 	private static final Logger L = LoggerFactory.getLogger(ToolBar.class);
 
 	private Gui gui;
-	private DefaultTreeModel treeModel;
+	private FmModel model;
 
 	/** Used to open/edit/print files. */
 	private Desktop desktop;
-	private File currentFile;
+	// private File model.getCurrentFile();
 
 	/* File controls. */
 	private JButton openFile;
@@ -36,11 +35,11 @@ public class ToolBar extends JToolBar {
 
 	private FileManager fileManager;
 
-	public ToolBar(FileManager _fileManager, Gui _gui, DefaultTreeModel _treeModel) {
+	public ToolBar(FileManager _fileManager, Gui _gui, FmModel _model) {
 
 		this.fileManager = _fileManager;
 		this.gui = _gui;
-		this.treeModel = _treeModel;
+		this.model = _model;
 
 		desktop = Desktop.getDesktop();
 
@@ -55,15 +54,15 @@ public class ToolBar extends JToolBar {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				try {
-					L.info("Desktop::open::asText '" + currentFile.toString() + "'");
+					L.info("Desktop::open::asText '" + model.getCurrentFile().toString() + "'");
 					Runtime rt = Runtime.getRuntime();
-					String[] args = { "open", "-a", "TextEdit", currentFile.toString() };
-					if (currentFile.isDirectory()) {
-						args = new String[] { "open", currentFile.toString() };
+					String[] args = { "open", "-a", "TextEdit", model.getCurrentFile().toString() };
+					if (model.getCurrentFile().isDirectory()) {
+						args = new String[] { "open", model.getCurrentFile().toString() };
 					}
 					rt.exec(args);
 				} catch (Throwable t) {
-					L.warn("Could not find viewer for " + currentFile.toString());
+					L.warn("Could not find viewer for " + model.getCurrentFile().toString());
 				}
 				gui.repaint();
 			}
@@ -79,10 +78,10 @@ public class ToolBar extends JToolBar {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				try {
-					L.info("Desktop::open '" + currentFile.toString() + "'");
-					desktop.open(currentFile);
+					L.info("Desktop::open '" + model.getCurrentFile().toString() + "'");
+					desktop.open(model.getCurrentFile());
 				} catch (Throwable t) {
-					L.warn("Could not find viewer for " + currentFile.toString());
+					L.warn("Could not find viewer for " + model.getCurrentFile().toString());
 				}
 				gui.repaint();
 			}
@@ -95,7 +94,7 @@ public class ToolBar extends JToolBar {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				try {
-					desktop.print(currentFile);
+					desktop.print(model.getCurrentFile());
 				} catch (Throwable t) {
 					gui.showThrowable(t);
 				}
@@ -115,7 +114,7 @@ public class ToolBar extends JToolBar {
 		newFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				fileManager.newFile(treeModel, currentFile);
+				fileManager.newFile(model.getTreeModel(), model.getCurrentFile());
 			}
 		});
 		add(newFile);
@@ -135,7 +134,7 @@ public class ToolBar extends JToolBar {
 		renameFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				fileManager.renameFile(treeModel, currentFile);
+				fileManager.renameFile(model.getTreeModel(), model.getCurrentFile());
 			}
 		});
 		add(renameFile);
@@ -145,14 +144,14 @@ public class ToolBar extends JToolBar {
 		deleteFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				fileManager.deleteFile(treeModel, currentFile);
+				fileManager.deleteFile(model.getTreeModel(), model.getCurrentFile());
 			}
 		});
 		add(deleteFile);
 
 	}
 
-	public void updateFile(File file) {
-		currentFile = file;
-	}
+	// public void updateFile(File file) {
+	// currentFile = file;
+	// }
 }

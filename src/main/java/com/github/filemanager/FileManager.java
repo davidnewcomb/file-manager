@@ -92,11 +92,8 @@ public class FileManager {
 		//
 	}
 
-	public Gui getGui() {
-		if (gui == null) {
-			gui = new Gui(this);
-		}
-		return gui;
+	public void setGui(Gui _gui) {
+		gui = _gui;
 	}
 
 	public void renameFile(DefaultTreeModel treeModel, File currentFile) {
