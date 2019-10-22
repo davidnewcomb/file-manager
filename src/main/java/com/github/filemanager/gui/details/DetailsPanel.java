@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import com.github.filemanager.Main;
 
-public class FileDetailsView extends JPanel {
+public class DetailsPanel extends JPanel {
 
 	private static final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
@@ -33,7 +33,7 @@ public class FileDetailsView extends JPanel {
 	private JRadioButton isDirectory;
 	private JRadioButton isFile;
 
-	public FileDetailsView() {
+	public DetailsPanel() {
 		super(new BorderLayout(4, 2));
 		setBorder(new EmptyBorder(0, 6, 0, 6));
 

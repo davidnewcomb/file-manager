@@ -7,9 +7,9 @@ import javax.swing.tree.DefaultTreeModel;
 import com.github.filemanager.FileManager;
 import com.github.filemanager.gui.Gui;
 
-public class FileTreeView extends JTree {
+public class FileTree extends JTree {
 
-	public FileTreeView(Gui gui, DefaultTreeModel treeModel, FileManager fileManager) {
+	public FileTree(Gui gui, DefaultTreeModel treeModel, FileManager fileManager) {
 		super(treeModel);
 
 		setRootVisible(false);

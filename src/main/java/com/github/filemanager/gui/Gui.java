@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.filemanager.FileManager;
 import com.github.filemanager.FileSorter;
-import com.github.filemanager.gui.details.FileDetailsView;
-import com.github.filemanager.gui.details.FmToolBar;
-import com.github.filemanager.gui.table.FileListView;
-import com.github.filemanager.gui.tree.FileTreeView;
+import com.github.filemanager.gui.details.DetailsPanel;
+import com.github.filemanager.gui.details.ToolBar;
+import com.github.filemanager.gui.table.Table;
+import com.github.filemanager.gui.tree.FileTree;
 
 public class Gui extends JPanel {
 
@@ -34,14 +34,14 @@ public class Gui extends JPanel {
 	private JProgressBar progressBar;
 	private AddressBar addressBar;
 
-	private FileTreeView fileTreeView;
+	private FileTree fileTreeView;
 
 	private DefaultTreeModel treeModel;
 
-	private FileListView fileListView;
+	private Table fileListView;
 
-	private FileDetailsView fileDetailsView;
-	private FmToolBar toolBar;
+	private DetailsPanel fileDetailsView;
+	private ToolBar toolBar;
 
 	public Gui(final FileManager fileManager) {
 		super(new BorderLayout(3, 3));
@@ -49,7 +49,7 @@ public class Gui extends JPanel {
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		JPanel detailView = new JPanel(new BorderLayout(3, 3));
-		fileListView = new FileListView(this);
+		fileListView = new Table(this);
 
 		JScrollPane tableScroll = new JScrollPane(fileListView);
 		Dimension d = tableScroll.getPreferredSize();
@@ -76,16 +76,16 @@ public class Gui extends JPanel {
 			}
 		}
 
-		fileTreeView = new FileTreeView(this, treeModel, fileManager);
+		fileTreeView = new FileTree(this, treeModel, fileManager);
 		JScrollPane treeScroll = new JScrollPane(fileTreeView);
 
 		Dimension preferredSize = treeScroll.getPreferredSize();
 		Dimension widePreferred = new Dimension(200, (int) preferredSize.getHeight());
 		treeScroll.setPreferredSize(widePreferred);
 
-		fileDetailsView = new FileDetailsView();
+		fileDetailsView = new DetailsPanel();
 
-		toolBar = new FmToolBar(fileManager, this, treeModel);
+		toolBar = new ToolBar(fileManager, this, treeModel);
 
 		JPanel fileView = new JPanel(new BorderLayout(3, 3));
 

@@ -16,9 +16,9 @@ import com.github.filemanager.FileSorter;
 import com.github.filemanager.gui.table.render_size.RenderSizeBuilder;
 import com.github.filemanager.gui.table.render_size.RenderSizeText;
 
-public class FileTableModel extends AbstractTableModel {
+public class TableModel extends AbstractTableModel {
 
-	private static final Logger L = LoggerFactory.getLogger(FileTableModel.class);
+	private static final Logger L = LoggerFactory.getLogger(TableModel.class);
 
 	public static final int ICON = 0;
 	public static final int FILE_NAME = 1;
@@ -35,7 +35,7 @@ public class FileTableModel extends AbstractTableModel {
 	private String[] columns = { "Icon", "File", "Size", "Last Modified", "R", "W", "E", "D", "F", };
 	private RenderSizeText renderSize;
 
-	public FileTableModel() {
+	public TableModel() {
 		this.files = new File[0];
 		configUpdate();
 	}

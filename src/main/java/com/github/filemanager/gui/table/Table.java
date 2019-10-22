@@ -13,38 +13,38 @@ import javax.swing.table.TableColumn;
 
 import com.github.filemanager.gui.Gui;
 
-public class FileListView extends JTable {
+public class Table extends JTable {
 
 	private static final int ROW_ICON_PADDING = 6;
 	private static FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
-	private FileTableModel fileTableModel;
+	private TableModel fileTableModel;
 	private ListSelectionListener listSelectionListener;
 
-	public FileListView(Gui gui) {
+	public Table(Gui gui) {
 		setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoCreateRowSorter(true);
 		setShowVerticalLines(false);
-		fileTableModel = new FileTableModel();
+		fileTableModel = new TableModel();
 		setModel(fileTableModel);
 
 		// size adjustment to better account for icons
 		Icon icon = fileSystemView.getSystemIcon(new File("/"));
 		setRowHeight(icon.getIconHeight() + ROW_ICON_PADDING);
 
-		setColumnWidth(FileTableModel.ICON, -1);
-		setColumnWidth(FileTableModel.SIZE, 100);
+		setColumnWidth(TableModel.ICON, -1);
+		setColumnWidth(TableModel.SIZE, 100);
 		// setColumnWidth(FileTableModel.FILE_NAME, Integer.MAX_VALUE);
-		getColumnModel().getColumn(FileTableModel.FILE_NAME).setMaxWidth(Integer.MAX_VALUE);
-		setColumnWidth(FileTableModel.LAST_MODIFIED, -1);
-		setColumnWidth(FileTableModel.READ, 20);
-		setColumnWidth(FileTableModel.WRITE, 20);
-		setColumnWidth(FileTableModel.EXECUTE, 20);
-		setColumnWidth(FileTableModel.DIRECTORY, 20);
-		setColumnWidth(FileTableModel.FILE, 20);
+		getColumnModel().getColumn(TableModel.FILE_NAME).setMaxWidth(Integer.MAX_VALUE);
+		setColumnWidth(TableModel.LAST_MODIFIED, -1);
+		setColumnWidth(TableModel.READ, 20);
+		setColumnWidth(TableModel.WRITE, 20);
+		setColumnWidth(TableModel.EXECUTE, 20);
+		setColumnWidth(TableModel.DIRECTORY, 20);
+		setColumnWidth(TableModel.FILE, 20);
 
-		listSelectionListener = new FileListViewListSelectionListener(this, gui);
+		listSelectionListener = new TableListSelectionListener(this, gui);
 		getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
 

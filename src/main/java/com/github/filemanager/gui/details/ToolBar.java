@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.github.filemanager.FileManager;
 import com.github.filemanager.gui.Gui;
 
-public class FmToolBar extends JToolBar {
-	private static final Logger L = LoggerFactory.getLogger(FmToolBar.class);
+public class ToolBar extends JToolBar {
+	private static final Logger L = LoggerFactory.getLogger(ToolBar.class);
 
 	private Gui gui;
 	private DefaultTreeModel treeModel;
@@ -36,7 +36,7 @@ public class FmToolBar extends JToolBar {
 
 	private FileManager fileManager;
 
-	public FmToolBar(FileManager _fileManager, Gui _gui, DefaultTreeModel _treeModel) {
+	public ToolBar(FileManager _fileManager, Gui _gui, DefaultTreeModel _treeModel) {
 
 		this.fileManager = _fileManager;
 		this.gui = _gui;
