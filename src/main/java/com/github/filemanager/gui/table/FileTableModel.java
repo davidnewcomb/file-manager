@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.filemanager.FileSorter;
+import com.github.filemanager.gui.table.render_size.RenderSizeBuilder;
+import com.github.filemanager.gui.table.render_size.RenderSizeText;
 
 public class FileTableModel extends AbstractTableModel {
 
@@ -31,9 +33,15 @@ public class FileTableModel extends AbstractTableModel {
 	private File[] files;
 	private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 	private String[] columns = { "Icon", "File", "Size", "Last Modified", "R", "W", "E", "D", "F", };
+	private RenderSizeText renderSize;
 
 	public FileTableModel() {
 		this.files = new File[0];
+		configUpdate();
+	}
+
+	private void configUpdate() {
+		renderSize = new RenderSizeBuilder().build();
 	}
 
 	@Override
@@ -45,8 +53,7 @@ public class FileTableModel extends AbstractTableModel {
 		case FILE_NAME:
 			return fileSystemView.getSystemDisplayName(file);
 		case SIZE:
-			// return niceSize(file.length(), 2);
-			return file.length();
+			return renderSize.render(file.length());
 		case LAST_MODIFIED:
 			return file.lastModified();
 		case READ:
@@ -109,17 +116,4 @@ public class FileTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
-	public static String niceSize(double bytes, int digits) {
-		String[] dictionary = { "b", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-		int index = 0;
-		for (index = 0; index < dictionary.length; index++) {
-			if (bytes < 1024) {
-				break;
-			}
-			bytes = bytes / 1024;
-		}
-		String s = String.format("%." + digits + "f", bytes) + " " + dictionary[index];
-		s = s.replaceAll(".00", "");
-		return s;
-	}
 }
