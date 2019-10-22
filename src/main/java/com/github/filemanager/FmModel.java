@@ -7,6 +7,7 @@ import java.util.Observable;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 public class FmModel extends Observable {
 
@@ -48,5 +49,20 @@ public class FmModel extends Observable {
 
 	public void setCurrentFile(File currentFile) {
 		this.currentFile = currentFile;
+		setChanged();
+		notifyObservers(currentFile);
+	}
+
+	private DefaultMutableTreeNode getNode(TreePath path) {
+		File[] files = (File[]) path.getPath();
+		DefaultMutableTreeNode n = (DefaultMutableTreeNode) treeModel.getRoot();
+		while (true) {
+
+		}
+	}
+
+	public void trimBranch(TreePath path) {
+		DefaultMutableTreeNode node = getNode(path);
+		node.removeAllChildren();
 	}
 }

@@ -2,6 +2,9 @@ package com.github.filemanager.gui.table;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -11,17 +14,41 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableColumn;
 
+import com.github.filemanager.FileSorter;
+import com.github.filemanager.FmModel;
 import com.github.filemanager.gui.Gui;
 
 public class Table extends JTable {
 
 	private static final int ROW_ICON_PADDING = 6;
-	private static FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+	private static final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+	private static final File[] NO_FILES = new File[0];
 
 	private TableModel fileTableModel;
 	private ListSelectionListener listSelectionListener;
 
-	public Table(Gui gui) {
+	public Table(FmModel model, Gui gui) {
+
+		model.addObserver(new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				File f = (File) arg;
+				if (!f.isDirectory()) {
+					return;
+				}
+				// TODO do in swing worker
+				File[] files = f.listFiles();
+				if (files == null) {
+					files = NO_FILES;
+				}
+				Arrays.sort(files, new FileSorter());
+				getSelectionModel().removeListSelectionListener(listSelectionListener);
+				fileTableModel.setFiles(files);
+				getSelectionModel().addListSelectionListener(listSelectionListener);
+
+			}
+		});
 		setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoCreateRowSorter(true);
@@ -44,7 +71,7 @@ public class Table extends JTable {
 		setColumnWidth(TableModel.DIRECTORY, 20);
 		setColumnWidth(TableModel.FILE, 20);
 
-		listSelectionListener = new TableListSelectionListener(this, gui);
+		listSelectionListener = new TableListSelectionListener(model, this);
 		getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
 
@@ -66,10 +93,10 @@ public class Table extends JTable {
 		// tableColumn.setMinWidth(100);
 	}
 
-	public void updateFiles(File[] files) {
-		getSelectionModel().removeListSelectionListener(listSelectionListener);
-		fileTableModel.setFiles(files);
-		getSelectionModel().addListSelectionListener(listSelectionListener);
-	}
+	// public void updateFiles(File[] files) {
+	// getSelectionModel().removeListSelectionListener(listSelectionListener);
+	// fileTableModel.setFiles(files);
+	// getSelectionModel().addListSelectionListener(listSelectionListener);
+	// }
 
 }

@@ -6,15 +6,15 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.github.filemanager.gui.Gui;
+import com.github.filemanager.FmModel;
 
 public class TableListSelectionListener implements ListSelectionListener {
 	private JTable table;
-	private Gui gui;
+	private FmModel model;
 
-	public TableListSelectionListener(JTable table, Gui gui) {
-		this.table = table;
-		this.gui = gui;
+	public TableListSelectionListener(FmModel _model, JTable _table) {
+		this.table = _table;
+		this.model = _model;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class TableListSelectionListener implements ListSelectionListener {
 		int row = table.getSelectionModel().getLeadSelectionIndex();
 		TableModel ftm = (TableModel) table.getModel();
 		File file = ftm.getFile(row);
-		gui.updateFile(file);
+		model.setCurrentFile(file);
 	}
 
 }

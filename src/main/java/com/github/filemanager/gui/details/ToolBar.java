@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.github.filemanager.FileManager;
 import com.github.filemanager.FmModel;
 import com.github.filemanager.gui.Gui;
+import com.github.filemanager.gui.details.al.LaunchFileActionListener;
+import com.github.filemanager.gui.details.al.OpenFileActionListener;
+import com.github.filemanager.gui.details.al.PrintFileActionListener;
 
 public class ToolBar extends JToolBar {
 	private static final Logger L = LoggerFactory.getLogger(ToolBar.class);
@@ -22,13 +25,11 @@ public class ToolBar extends JToolBar {
 
 	/** Used to open/edit/print files. */
 	private Desktop desktop;
-	// private File model.getCurrentFile();
 
 	/* File controls. */
 	private JButton openFile;
 	private JButton launchFile;
 	private JButton printFile;
-	// private JButton editFile;
 	private JButton deleteFile;
 	private JButton newFile;
 	private JButton copyFile;
@@ -48,58 +49,17 @@ public class ToolBar extends JToolBar {
 
 		openFile = new JButton("Open");
 		openFile.setMnemonic('o');
-
-		openFile.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					L.info("Desktop::open::asText '" + model.getCurrentFile().toString() + "'");
-					Runtime rt = Runtime.getRuntime();
-					String[] args = { "open", "-a", "TextEdit", model.getCurrentFile().toString() };
-					if (model.getCurrentFile().isDirectory()) {
-						args = new String[] { "open", model.getCurrentFile().toString() };
-					}
-					rt.exec(args);
-				} catch (Throwable t) {
-					L.warn("Could not find viewer for " + model.getCurrentFile().toString());
-				}
-				gui.repaint();
-			}
-
-		});
+		openFile.addActionListener(new OpenFileActionListener(model));
 		add(openFile);
 
 		launchFile = new JButton("Launch");
 		launchFile.setMnemonic('l');
-
-		launchFile.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					L.info("Desktop::open '" + model.getCurrentFile().toString() + "'");
-					desktop.open(model.getCurrentFile());
-				} catch (Throwable t) {
-					L.warn("Could not find viewer for " + model.getCurrentFile().toString());
-				}
-				gui.repaint();
-			}
-		});
+		launchFile.addActionListener(new LaunchFileActionListener(model));
 		add(launchFile);
 
 		printFile = new JButton("Print");
 		printFile.setMnemonic('p');
-		printFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					desktop.print(model.getCurrentFile());
-				} catch (Throwable t) {
-					gui.showThrowable(t);
-				}
-			}
-		});
+		printFile.addActionListener(new PrintFileActionListener(model));
 		add(printFile);
 
 		// Check the actions are supported on this platform!
@@ -124,6 +84,7 @@ public class ToolBar extends JToolBar {
 		copyFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
+				L.warn("'Copy' not implemented.", "Not implemented.");
 				gui.showErrorMessage("'Copy' not implemented.", "Not implemented.");
 			}
 		});

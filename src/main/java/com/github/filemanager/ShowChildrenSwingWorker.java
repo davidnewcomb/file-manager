@@ -23,6 +23,11 @@ public class ShowChildrenSwingWorker extends SwingWorker<Void, File> {
 	@Override
 	public Void doInBackground() {
 		gui.uiShowChildrenOn();
+		process();
+		return null;
+	}
+
+	private void process() {
 		File file = (File) node.getUserObject();
 		if (file.isDirectory()) {
 			File[] files = fileSystemView.getFiles(file, true);
@@ -35,7 +40,6 @@ public class ShowChildrenSwingWorker extends SwingWorker<Void, File> {
 			}
 			gui.updateTableFiles(files);
 		}
-		return null;
 	}
 
 	@Override

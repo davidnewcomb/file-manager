@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
@@ -16,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileSystemView;
 
+import com.github.filemanager.FmModel;
 import com.github.filemanager.Main;
 
 public class DetailsPanel extends JPanel {
@@ -33,8 +36,17 @@ public class DetailsPanel extends JPanel {
 	private JRadioButton isDirectory;
 	private JRadioButton isFile;
 
-	public DetailsPanel() {
+	public DetailsPanel(FmModel model) {
 		super(new BorderLayout(4, 2));
+
+		model.addObserver(new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				File f = (File) arg;
+				updatetFileDetails(f);
+			}
+		});
 		setBorder(new EmptyBorder(0, 6, 0, 6));
 
 		JPanel fileDetailsLabels = new JPanel(new GridLayout(0, 1, 2, 2));

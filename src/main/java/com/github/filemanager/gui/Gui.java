@@ -47,7 +47,7 @@ public class Gui extends JPanel {
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		JPanel detailView = new JPanel(new BorderLayout(3, 3));
-		fileListView = new Table(this);
+		fileListView = new Table(model, this);
 
 		JScrollPane tableScroll = new JScrollPane(fileListView);
 		Dimension d = tableScroll.getPreferredSize();
@@ -75,14 +75,14 @@ public class Gui extends JPanel {
 		// }
 		// }
 
-		fileTreeView = new FileTree(this, model, fileManager);
+		fileTreeView = new FileTree(model);
 		JScrollPane treeScroll = new JScrollPane(fileTreeView);
 
 		Dimension preferredSize = treeScroll.getPreferredSize();
 		Dimension widePreferred = new Dimension(200, (int) preferredSize.getHeight());
 		treeScroll.setPreferredSize(widePreferred);
 
-		fileDetailsView = new DetailsPanel();
+		fileDetailsView = new DetailsPanel(model);
 
 		toolBar = new ToolBar(fileManager, this, model);
 
@@ -103,14 +103,14 @@ public class Gui extends JPanel {
 
 		add(simpleOutput, BorderLayout.SOUTH);
 
-		addressBar = new AddressBar();
+		addressBar = new AddressBar(model);
 		add(addressBar, BorderLayout.NORTH);
 	}
 
 	public void updateFile(File file) {
 		fileDetailsView.updatetFileDetails(file);
 		// toolBar.updateFile(file);
-		addressBar.updateFile(file);
+		// addressBar.updateFile(file);
 	}
 
 	public void showRootFile() {
@@ -147,7 +147,7 @@ public class Gui extends JPanel {
 
 	public void updateTableFiles(File[] files) {
 		L.info("Gui:updateTableFiles");
-		fileListView.updateFiles(files);
+		// fileListView.updateFiles(files);
 	}
 
 	public void showErrorMessage(String errorMessage, String errorTitle) {

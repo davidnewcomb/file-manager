@@ -41,6 +41,7 @@ public class TableModel extends AbstractTableModel {
 	}
 
 	private void configUpdate() {
+		// TODO use observers to update
 		renderSize = new RenderSizeBuilder().build();
 	}
 
