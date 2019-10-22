@@ -1,4 +1,4 @@
-package com.github.filemanager;
+package com.github.filemanager.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,6 +18,13 @@ import javax.swing.tree.TreePath;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.filemanager.FileManager;
+import com.github.filemanager.FileSorter;
+import com.github.filemanager.gui.details.FileDetailsView;
+import com.github.filemanager.gui.details.FmToolBar;
+import com.github.filemanager.gui.table.FileListView;
+import com.github.filemanager.gui.tree.FileTreeView;
 
 public class Gui extends JPanel {
 

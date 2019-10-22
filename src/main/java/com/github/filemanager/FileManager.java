@@ -38,6 +38,8 @@ import javax.swing.tree.TreePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.filemanager.gui.Gui;
+
 /**
  * A basic File Manager. Requires 1.6+ for the Desktop &amp; SwingWorker
  * classes, amongst other minor things.
@@ -248,7 +250,7 @@ public class FileManager {
 	 * Add the files that are contained within the directory of this node.
 	 * Thanks to Hovercraft Full Of Eels.
 	 */
-	void showChildren(DefaultMutableTreeNode node) {
+	public void showChildren(DefaultMutableTreeNode node) {
 		ShowChildrenSwingWorker w = new ShowChildrenSwingWorker(gui, node);
 		w.execute();
 	}

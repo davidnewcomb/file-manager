@@ -1,5 +1,5 @@
 /** A TreeCellRenderer for a File. */
-package com.github.filemanager;
+package com.github.filemanager.gui.tree;
 
 import java.awt.Component;
 import java.io.File;
@@ -16,7 +16,7 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private JLabel label;
 
-	FileTreeCellRenderer() {
+	public FileTreeCellRenderer() {
 		label = new JLabel();
 		label.setOpaque(true);
 	}

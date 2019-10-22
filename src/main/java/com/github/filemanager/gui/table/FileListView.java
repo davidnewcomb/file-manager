@@ -1,4 +1,4 @@
-package com.github.filemanager;
+package com.github.filemanager.gui.table;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -10,6 +10,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableColumn;
+
+import com.github.filemanager.gui.Gui;
 
 public class FileListView extends JTable {
 

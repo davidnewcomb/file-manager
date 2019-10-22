@@ -7,6 +7,8 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.github.filemanager.gui.Gui;
+
 public class ShowChildrenSwingWorker extends SwingWorker<Void, File> {
 	private static FileSystemView fileSystemView = FileSystemView.getFileSystemView();;
 

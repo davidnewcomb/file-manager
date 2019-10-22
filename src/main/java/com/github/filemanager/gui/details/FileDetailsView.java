@@ -1,4 +1,4 @@
-package com.github.filemanager;
+package com.github.filemanager.gui.details;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -15,6 +15,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileSystemView;
+
+import com.github.filemanager.Main;
 
 public class FileDetailsView extends JPanel {
 

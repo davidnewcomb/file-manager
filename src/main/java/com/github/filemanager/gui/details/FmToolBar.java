@@ -1,4 +1,4 @@
-package com.github.filemanager;
+package com.github.filemanager.gui.details;
 
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,9 @@ import javax.swing.tree.DefaultTreeModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.filemanager.FileManager;
+import com.github.filemanager.gui.Gui;
 
 public class FmToolBar extends JToolBar {
 	private static final Logger L = LoggerFactory.getLogger(FmToolBar.class);

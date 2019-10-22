@@ -1,10 +1,13 @@
-package com.github.filemanager;
+package com.github.filemanager.gui.tree;
 
 import java.io.File;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.github.filemanager.FileManager;
+import com.github.filemanager.gui.Gui;
 
 public class FileTreeSelectionListener implements TreeSelectionListener {
 

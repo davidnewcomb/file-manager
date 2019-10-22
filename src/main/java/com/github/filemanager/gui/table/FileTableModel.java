@@ -1,5 +1,5 @@
 /** A TableModel to hold File[]. */
-package com.github.filemanager;
+package com.github.filemanager.gui.table;
 
 import java.io.File;
 import java.util.Arrays;
@@ -11,6 +11,8 @@ import javax.swing.table.AbstractTableModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.filemanager.FileSorter;
 
 public class FileTableModel extends AbstractTableModel {
 
@@ -30,7 +32,7 @@ public class FileTableModel extends AbstractTableModel {
 	private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 	private String[] columns = { "Icon", "File", "Size", "Last Modified", "R", "W", "E", "D", "F", };
 
-	FileTableModel() {
+	public FileTableModel() {
 		this.files = new File[0];
 	}
 

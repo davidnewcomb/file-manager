@@ -1,4 +1,4 @@
-package com.github.filemanager;
+package com.github.filemanager.gui;
 
 import java.awt.BorderLayout;
 import java.io.File;

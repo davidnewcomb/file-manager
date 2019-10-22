@@ -1,8 +1,11 @@
-package com.github.filemanager;
+package com.github.filemanager.gui.tree;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
+
+import com.github.filemanager.FileManager;
+import com.github.filemanager.gui.Gui;
 
 public class FileTreeView extends JTree {
 
