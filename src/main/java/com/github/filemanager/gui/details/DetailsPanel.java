@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
@@ -39,14 +37,7 @@ public class DetailsPanel extends JPanel {
 	public DetailsPanel(FmModel model) {
 		super(new BorderLayout(4, 2));
 
-		model.addObserver(new Observer() {
-
-			@Override
-			public void update(Observable o, Object arg) {
-				File f = (File) arg;
-				updatetFileDetails(f);
-			}
-		});
+		model.addObserver(new DetailsPanelObserver(this));
 		setBorder(new EmptyBorder(0, 6, 0, 6));
 
 		JPanel fileDetailsLabels = new JPanel(new GridLayout(0, 1, 2, 2));
