@@ -26,15 +26,11 @@ import com.github.filemanager.gui.tree.FileTree;
 public class Gui extends JPanel {
 
 	private static final Logger L = LoggerFactory.getLogger(Gui.class);
-	// private static FileSystemView fileSystemView =
-	// FileSystemView.getFileSystemView();
 
 	private JProgressBar progressBar;
 	private AddressBar addressBar;
 
 	private FileTree fileTreeView;
-
-	// private DefaultTreeModel treeModel;
 
 	private Table fileListView;
 
@@ -53,27 +49,6 @@ public class Gui extends JPanel {
 		Dimension d = tableScroll.getPreferredSize();
 		tableScroll.setPreferredSize(new Dimension((int) d.getWidth(), (int) d.getHeight() / 2));
 		detailView.add(tableScroll, BorderLayout.CENTER);
-
-		// // the File tree
-		// DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		// treeModel = new DefaultTreeModel(root);
-		//
-		// // show the file system roots.
-		// File[] roots = fileSystemView.getRoots();
-		// for (File fileSystemRoot : roots) {
-		// DefaultMutableTreeNode node = new
-		// DefaultMutableTreeNode(fileSystemRoot);
-		// root.add(node);
-		// // fileManager.showChildren(node);
-		//
-		// File[] files = fileSystemView.getFiles(fileSystemRoot, true);
-		// Arrays.sort(files, new FileSorter());
-		// for (File file : files) {
-		// if (file.isDirectory()) {
-		// node.add(new DefaultMutableTreeNode(file));
-		// }
-		// }
-		// }
 
 		fileTreeView = new FileTree(model);
 		JScrollPane treeScroll = new JScrollPane(fileTreeView);
