@@ -22,9 +22,10 @@ class AddressBarKeyAdapter extends KeyAdapter {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			String s = tf.getText().trim();
 			File f = new File(s);
-			if (f.isDirectory()) {
-				model.setCurrentFile(f);
+			while (!f.isDirectory()) {
+				f = f.getParentFile();
 			}
+			model.setCurrentFile(f);
 		}
 	}
 
