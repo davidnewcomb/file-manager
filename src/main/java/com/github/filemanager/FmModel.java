@@ -7,7 +7,8 @@ import java.util.Observable;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
+
+import com.github.filemanager.gui.tree.FileNode;
 
 public class FmModel extends Observable {
 
@@ -24,7 +25,7 @@ public class FmModel extends Observable {
 		// show the file system roots.
 		File[] roots = fileSystemView.getRoots();
 		for (File fileSystemRoot : roots) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
+			DefaultMutableTreeNode node = new FileNode(fileSystemRoot);
 			root.add(node);
 			// fileManager.showChildren(node);
 
@@ -32,7 +33,7 @@ public class FmModel extends Observable {
 			Arrays.sort(files, new FileSorter());
 			for (File file : files) {
 				if (file.isDirectory()) {
-					node.add(new DefaultMutableTreeNode(file));
+					node.add(new FileNode(file));
 				}
 			}
 		}
@@ -51,18 +52,5 @@ public class FmModel extends Observable {
 		this.currentFile = currentFile;
 		setChanged();
 		notifyObservers(currentFile);
-	}
-
-	private DefaultMutableTreeNode getNode(TreePath path) {
-		File[] files = (File[]) path.getPath();
-		DefaultMutableTreeNode n = (DefaultMutableTreeNode) treeModel.getRoot();
-		while (true) {
-
-		}
-	}
-
-	public void trimBranch(TreePath path) {
-		DefaultMutableTreeNode node = getNode(path);
-		node.removeAllChildren();
 	}
 }
